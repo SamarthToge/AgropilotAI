@@ -27,6 +27,11 @@
 - **UI & Visualization:** Google Fonts, `fl_chart` for analytics
 
 ---
+Models:
+Random Forest
+XGBoost
+
+API: Fast API  to provide data to the model
 
 ## 🚀 Getting Started
 
@@ -89,3 +94,5 @@ Contributions, issues, and feature requests are welcome!
 5. Open a Pull Request.
 
 [Watch Demo Video]- https://github.com/SamarthToge/AgropilotAI/archive/refs/tags/v1.0.zip
+
+
