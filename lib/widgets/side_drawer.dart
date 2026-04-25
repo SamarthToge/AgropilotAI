@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:agropilot_ai/gen_l10n/app_localizations.dart';
 import '../constants/app_constants.dart';
 import '../providers/app_state.dart';
 import '../screens/settings_screen.dart';
 import '../screens/farmer_profile_screen.dart';
 import '../screens/ai_analysis_screen.dart';
 import '../screens/history_screen.dart';
+import '../screens/harvest_log/harvest_entries_screen.dart';
 
 class SideDrawer extends StatelessWidget {
   final VoidCallback onLogout;
@@ -16,6 +18,7 @@ class SideDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Drawer(
       backgroundColor: Colors.white,
@@ -77,12 +80,12 @@ class SideDrawer extends StatelessWidget {
                 children: [
                   _DrawerItem(
                     icon: Icons.home_outlined,
-                    label: "Home Dashboard",
+                    label: l10n.homeDashboard,
                     onTap: () => Navigator.pop(context),
                   ),
                   _DrawerItem(
                     icon: Icons.settings_outlined,
-                    label: "Settings",
+                    label: l10n.settings,
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.push(
@@ -94,7 +97,7 @@ class SideDrawer extends StatelessWidget {
                   ),
                   _DrawerItem(
                     icon: Icons.person_outline,
-                    label: "Farmer Profile",
+                    label: l10n.farmerProfile,
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.push(
@@ -106,7 +109,7 @@ class SideDrawer extends StatelessWidget {
                   ),
                   _DrawerItem(
                     icon: Icons.history_outlined,
-                    label: "History & Reports",
+                    label: l10n.historyReports,
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.push(
@@ -118,7 +121,7 @@ class SideDrawer extends StatelessWidget {
                   ),
                   _DrawerItem(
                     icon: Icons.auto_graph_outlined,
-                    label: "🤖 AI Analysis",
+                    label: "🤖 ${l10n.aiAnalysis}",
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.push(
@@ -128,11 +131,23 @@ class SideDrawer extends StatelessWidget {
                       );
                     },
                   ),
+                  _DrawerItem(
+                    icon: Icons.inventory_2_outlined,
+                    label: "📦 ${l10n.harvestLog}",
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const HarvestEntriesScreen()),
+                      );
+                    },
+                  ),
                   const Divider(height: 24),
                   const Spacer(),
                   _DrawerItem(
                     icon: Icons.logout,
-                    label: "Logout",
+                    label: l10n.logout,
                     iconColor: AppColors.critical,
                     labelColor: AppColors.critical,
                     onTap: () {

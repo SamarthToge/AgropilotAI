@@ -88,6 +88,13 @@ lib/firebase_options.dart
 google-services.json
 GoogleService-Info.plist
 
+# Gemini API key (contains secret key - never commit)
+lib/services/gemini_chat_service.dart
+
+# APK / build outputs
+*.apk
+*.aab
+
 # Coverage
 coverage/
 

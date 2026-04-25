@@ -14,6 +14,8 @@ dependencies:
   fl_chart: ^1.1.1
   provider: ^6.1.5+1
   google_fonts: ^8.0.2
+  flutter_localizations:
+    sdk: flutter
   intl: ^0.20.2
   http: ^1.6.0
   flutter_local_notifications: ^21.0.0
@@ -27,6 +29,9 @@ dependencies:
   # Local Storage
   shared_preferences: ^2.5.2
 
+  # Gemini AI
+  google_generative_ai: ^0.4.6
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -34,6 +39,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/app_logo.png

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:agropilot_ai/gen_l10n/app_localizations.dart';
 import '../constants/app_constants.dart';
 import '../providers/app_state.dart';
 
@@ -10,6 +11,7 @@ class FarmerProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -17,7 +19,7 @@ class FarmerProfileScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          "Farmer Profile",
+          l10n.farmerProfile,
           style: GoogleFonts.poppins(
               fontWeight: FontWeight.w700, color: AppColors.textPrimary),
         ),
@@ -109,7 +111,7 @@ class FarmerProfileScreen extends StatelessWidget {
                 Expanded(
                   child: _StatCard(
                     value: "${state.totalDaysMonitored}",
-                    label: "Days\nMonitored",
+                    label: l10n.daysPlanted,
                     icon: "📅",
                     color: AppColors.primary,
                   ),
@@ -118,7 +120,7 @@ class FarmerProfileScreen extends StatelessWidget {
                 Expanded(
                   child: _StatCard(
                     value: "${state.alertsResolved}",
-                    label: "Alerts\nResolved",
+                    label: l10n.alertLevel,
                     icon: "✅",
                     color: AppColors.secondary,
                   ),
@@ -127,7 +129,7 @@ class FarmerProfileScreen extends StatelessWidget {
                 Expanded(
                   child: _StatCard(
                     value: "${state.remainingDays}",
-                    label: "Days to\nHarvest",
+                    label: l10n.daysLeft,
                     icon: "🌾",
                     color: AppColors.warning,
                   ),
@@ -138,19 +140,19 @@ class FarmerProfileScreen extends StatelessWidget {
 
             // ── Crop details ──────────────────────────────────────────
             _InfoCard(
-              title: "🌿 Current Crop",
+              title: "🌿 ${l10n.cropType}",
               children: [
                 _InfoRow(
-                    label: "Crop",
+                    label: l10n.cropType,
                     value:
                         "${state.cropConfig.emoji}  ${state.cropType}"),
-                _InfoRow(label: "Stage", value: state.growthStage),
+                _InfoRow(label: l10n.growthStage, value: state.growthStage),
                 _InfoRow(
-                    label: "Progress",
+                    label: l10n.daysPlanted,
                     value:
-                        "Day ${state.daysPlanted} of ${state.totalDays}"),
+                        "${state.daysPlanted} / ${state.totalDays}"),
                 _InfoRow(
-                    label: "Yield Target",
+                    label: l10n.targetYield,
                     value: "${state.targetYield.toStringAsFixed(1)} kg/m²"),
               ],
             ),

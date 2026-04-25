@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:agropilot_ai/gen_l10n/app_localizations.dart';
 import '../constants/app_constants.dart';
 import '../providers/history_provider.dart';
 import '../providers/sensor_provider.dart';
@@ -87,7 +88,7 @@ class _AiAnalysisScreenState extends State<AiAnalysisScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          "🤖 AI Analysis",
+          "🤖 ${AppLocalizations.of(context)!.aiAnalysis}",
           style: GoogleFonts.poppins(
               fontWeight: FontWeight.w700, color: AppColors.textPrimary),
         ),

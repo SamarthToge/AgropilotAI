@@ -1,0 +1,6 @@
+{
+  "name": "Gemini Chat Clone",
+  "description": "A responsive, ChatGPT-like web interface powered by the Gemini 3.1 Pro model.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

@@ -81,6 +81,12 @@ class FirebaseService {
     await _auth.signOut();
   }
 
+  // ─── Generic RTDB access ─────────────────────────────────────────────────
+
+  /// Returns a [DatabaseReference] for any RTDB path.
+  /// Use this when you need direct read access to an arbitrary node.
+  DatabaseReference rdbRef(String path) => _rtdb.ref(path);
+
   // ─── Realtime Database (ESP32 Live Data) ─────────────────────────────────
 
   /// Stream of live sensor readings from RTDB.

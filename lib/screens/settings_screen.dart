@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:agropilot_ai/gen_l10n/app_localizations.dart';
 import '../constants/app_constants.dart';
 import '../providers/app_state.dart';
+import '../providers/language_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -35,6 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
     final config = state.cropConfig;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -42,7 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          "Settings",
+          l10n.settings,
           style: GoogleFonts.poppins(
               fontWeight: FontWeight.w700, color: AppColors.textPrimary),
         ),
@@ -53,11 +56,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ── Language Selection ─────────────────────────────────────
+            _LanguageCard(),
+            const SizedBox(height: 16),
+
             // ── Crop Type ─────────────────────────────────────────────
             _SettingsCard(
-              title: "🌿 Crop Configuration",
+              title: l10n.cropConfiguration,
+
               children: [
-                _SettingLabel("Crop Type"),
+                _SettingLabel(l10n.cropType),
                 const SizedBox(height: 8),
                 Row(
                   children: ["Spinach", "Capsicum"].map((crop) {
@@ -115,7 +123,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 16),
 
                 // Growth Stage selector
-                _SettingLabel("Growth Stage"),
+                _SettingLabel(l10n.growthStage),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
                   value: state.growthStage,
@@ -135,7 +143,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 16),
 
                 // Days planted
-                _SettingLabel("Days Planted"),
+                _SettingLabel(l10n.daysPlanted),
                 const SizedBox(height: 8),
                 TextField(
                   controller: _daysCtrl,
@@ -151,7 +159,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 16),
 
                 // Target yield
-                _SettingLabel("Target Yield"),
+                _SettingLabel(l10n.targetYield),
                 const SizedBox(height: 8),
                 TextField(
                   controller: _targetCtrl,
@@ -170,7 +178,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             // ── PID Setpoints (read-only) ─────────────────────────────
             _SettingsCard(
-              title: "⚙️ PID Setpoints (Read-Only)",
+              title: l10n.pidSetpoints,
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -180,13 +188,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   child: Column(
                     children: [
-                      _PidRow("🌡 Temperature", "${config.pidTemp}°C"),
+                      _PidRow("🌡 ${l10n.temperature}", "${config.pidTemp}°C"),
                       const Divider(height: 16),
-                      _PidRow("💧 Humidity", "${config.pidHumidity}%"),
+                      _PidRow("💧 ${l10n.humidity}", "${config.pidHumidity}%"),
                       const Divider(height: 16),
-                      _PidRow("💨 CO₂", "${config.pidCo2} ppm"),
+                      _PidRow("💨 ${l10n.co2}", "${config.pidCo2} ppm"),
                       const Divider(height: 16),
-                      _PidRow("🌱 Soil Moisture", "${config.pidMoisture}%"),
+                      _PidRow("🌱 ${l10n.soilMoisture}", "${config.pidMoisture}%"),
                     ],
                   ),
                 ),
@@ -202,27 +210,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             // ── Notifications ────────────────────────────────────────
             _SettingsCard(
-              title: "🔔 Notifications",
+              title: l10n.notificationsTitle,
               children: [
                 _ToggleRow(
-                  label: "Critical Alerts",
-                  subtitle: "Immediately notify on critical sensor values",
+                  label: l10n.criticalAlerts,
+                  subtitle: l10n.criticalAlertsSubtitle,
                   value: state.criticalAlertsEnabled,
                   onChanged: (v) =>
                       context.read<AppState>().toggleCriticalAlerts(v),
                 ),
                 const Divider(height: 8),
                 _ToggleRow(
-                  label: "Daily Summary",
-                  subtitle: "Get daily crop health report at 8 AM",
+                  label: l10n.dailySummary,
+                  subtitle: l10n.dailySummarySubtitle,
                   value: state.dailySummaryEnabled,
                   onChanged: (v) =>
                       context.read<AppState>().toggleDailySummary(v),
                 ),
                 const Divider(height: 8),
                 _ToggleRow(
-                  label: "Harvest Reminder",
-                  subtitle: "Notify 3 days before estimated harvest date",
+                  label: l10n.harvestReminder,
+                  subtitle: l10n.harvestReminderSubtitle,
                   value: state.harvestReminderEnabled,
                   onChanged: (v) =>
                       context.read<AppState>().toggleHarvestReminder(v),
@@ -375,6 +383,164 @@ class _ToggleRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// ── Language Selection Card ────────────────────────────────────────────────
+class _LanguageCard extends StatelessWidget {
+  const _LanguageCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final langProvider = context.watch<LanguageProvider>();
+    final l10n = AppLocalizations.of(context)!;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.goodBg,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Text('🌐', style: TextStyle(fontSize: 20)),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                l10n.selectLanguage,
+                style: GoogleFonts.poppins(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+
+          // Language tiles
+          ...LanguageProvider.supportedLanguages.map((lang) {
+            final isSelected =
+                langProvider.locale.languageCode == lang['code'];
+            return _LanguageTile(
+              code: lang['code']!,
+              nativeName: lang['native']!,
+              englishName: lang['name']!,
+              isSelected: isSelected,
+              onTap: () async {
+                await context
+                    .read<LanguageProvider>()
+                    .changeLanguage(lang['code']!);
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      l10n.languageChanged,
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+                    ),
+                    backgroundColor: AppColors.good,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              },
+            );
+          }),
+        ],
+      ),
+    );
+  }
+}
+
+class _LanguageTile extends StatelessWidget {
+  final String code;
+  final String nativeName;
+  final String englishName;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _LanguageTile({
+    required this.code,
+    required this.nativeName,
+    required this.englishName,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      margin: const EdgeInsets.only(bottom: 6),
+      decoration: BoxDecoration(
+        color: isSelected
+            ? AppColors.goodBg
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: isSelected
+              ? AppColors.primary.withValues(alpha: 0.4)
+              : Colors.transparent,
+        ),
+      ),
+      child: ListTile(
+        dense: true,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        onTap: onTap,
+        leading: CircleAvatar(
+          radius: 18,
+          backgroundColor:
+              isSelected ? AppColors.primary : const Color(0xFFEEEEEE),
+          child: Text(
+            code.toUpperCase(),
+            style: GoogleFonts.poppins(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: isSelected ? Colors.white : AppColors.textSecondary,
+            ),
+          ),
+        ),
+        title: Text(
+          nativeName,
+          style: GoogleFonts.poppins(
+            fontSize: 14,
+            fontWeight:
+                isSelected ? FontWeight.w700 : FontWeight.w500,
+            color: isSelected ? AppColors.primary : AppColors.textPrimary,
+          ),
+        ),
+        subtitle: Text(
+          englishName,
+          style: GoogleFonts.poppins(
+            fontSize: 11,
+            color: AppColors.textSecondary,
+          ),
+        ),
+        trailing: isSelected
+            ? const Icon(Icons.check_circle,
+                color: AppColors.primary, size: 20)
+            : null,
+      ),
     );
   }
 }

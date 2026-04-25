@@ -15,8 +15,11 @@ allprojects {
     }
 }
 
+val newBuildDir = File("C:/temp/agropilot_ai_build")
+rootProject.layout.buildDirectory.set(newBuildDir)
 
 subprojects {
+    project.layout.buildDirectory.set(File(newBuildDir, project.name))
     project.evaluationDependsOn(":app")
 }
 

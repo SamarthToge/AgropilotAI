@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:agropilot_ai/gen_l10n/app_localizations.dart';
 import '../constants/app_constants.dart';
 import '../providers/app_state.dart';
 
@@ -11,6 +12,7 @@ class CropInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
+    final l10n = AppLocalizations.of(context)!;
     final config = state.cropConfig;
     final stages = config.stages;
     final progress = state.progressPercent;
@@ -56,7 +58,7 @@ class CropInfoCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "${state.growthStage} Stage",
+                    "${state.growthStage} ${l10n.growthStage}",
                     style: GoogleFonts.poppins(
                       color: Colors.white70,
                       fontSize: 13,
@@ -69,7 +71,7 @@ class CropInfoCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    "Day ${state.daysPlanted}",
+                    "${l10n.daysPlanted} ${state.daysPlanted}",
                     style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontSize: 22,
@@ -77,7 +79,7 @@ class CropInfoCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "of ${state.totalDays} days",
+                    "/ ${state.totalDays} ${l10n.daysLeftSuffix}",
                     style: GoogleFonts.poppins(
                       color: Colors.white70,
                       fontSize: 12,
@@ -203,7 +205,7 @@ class CropInfoCard extends StatelessWidget {
               const Icon(Icons.calendar_today, color: Colors.white70, size: 14),
               const SizedBox(width: 6),
               Text(
-                "Est. Harvest: $harvestDate",
+                "${l10n.estHarvest} $harvestDate",
                 style: GoogleFonts.poppins(
                   color: Colors.white70,
                   fontSize: 12,
@@ -218,7 +220,7 @@ class CropInfoCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  "${state.remainingDays} days left",
+                  "${state.remainingDays} ${l10n.daysLeftSuffix}",
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,

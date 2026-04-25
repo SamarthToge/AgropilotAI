@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:agropilot_ai/gen_l10n/app_localizations.dart';
 import '../constants/app_constants.dart';
 import '../providers/app_state.dart';
 import 'status_badge.dart';
@@ -13,6 +14,7 @@ class YieldSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -35,7 +37,7 @@ class YieldSummaryCard extends StatelessWidget {
               const Text("🌾", style: TextStyle(fontSize: 18)),
               const SizedBox(width: 8),
               Text(
-                "Yield Forecast",
+                l10n.yieldForecast,
                 style: GoogleFonts.poppins(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
@@ -76,13 +78,13 @@ class YieldSummaryCard extends StatelessWidget {
           Row(
             children: [
               _YieldStat(
-                label: "Target",
+                label: l10n.target,
                 value: "${state.targetYield.toStringAsFixed(1)} kg/m²",
                 color: AppColors.good,
               ),
               const SizedBox(width: 16),
               _YieldStat(
-                label: "Gap",
+                label: l10n.gap,
                 value: "-${state.yieldGap.toStringAsFixed(1)} kg/m²",
                 color: AppColors.warning,
               ),
@@ -95,7 +97,7 @@ class YieldSummaryCard extends StatelessWidget {
               onPressed: onViewFull,
               icon: const Icon(Icons.bar_chart, size: 16),
               label: Text(
-                "View Full Prediction →",
+                l10n.viewFullPrediction,
                 style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
               ),
               style: ElevatedButton.styleFrom(

@@ -36,6 +36,8 @@ android {
         release {
             // TODO: Add your own signing config for the release build.
             signingConfig = signingConfigs.getByName("debug")
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }

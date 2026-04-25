@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:agropilot_ai/gen_l10n/app_localizations.dart';
 import '../constants/app_constants.dart';
 import '../providers/app_state.dart';
 import '../providers/sensor_provider.dart';
@@ -13,7 +14,9 @@ import '../widgets/side_drawer.dart';
 import 'sensor_details_screen.dart';
 import 'yield_prediction_screen.dart';
 import 'history_screen.dart';
-import 'login_screen.dart';
+import 'harvest_log/harvest_entries_screen.dart';
+import 'chatbot_screen.dart';
+
 
 class HomeDashboard extends StatefulWidget {
   const HomeDashboard({super.key});
@@ -52,6 +55,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
     final sensors = context.watch<SensorProvider>();
     final history = context.watch<HistoryProvider>();
     final activeAlerts = history.activeAlerts;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -61,6 +65,23 @@ class _HomeDashboardState extends State<HomeDashboard> {
           await context.read<AppState>().logout();
         },
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ChatbotScreen()),
+        ),
+        icon: const Text('🤖', style: TextStyle(fontSize: 20)),
+        label: Text(
+          'Ask AI',
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+            fontSize: 14,
+          ),
+        ),
+        backgroundColor: AppColors.primary,
+        elevation: 4,
+      ),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -69,7 +90,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
         ),
         title: Text(
-          "AgroPilot AI",
+          l10n.appName,
           style: GoogleFonts.poppins(
             color: AppColors.primary,
             fontSize: 20,
@@ -151,7 +172,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Welcome back,",
+                      l10n.welcomeBack,
                       style: GoogleFonts.poppins(
                         color: AppColors.textSecondary,
                         fontSize: 13,
@@ -205,8 +226,8 @@ class _HomeDashboardState extends State<HomeDashboard> {
 
             // ── Live Sensors ───────────────────────────────────────────
             _SectionHeader(
-              title: "Live Sensors",
-              action: "View All →",
+              title: l10n.liveSensors,
+              action: l10n.viewAll,
               onAction: () => Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -224,28 +245,28 @@ class _HomeDashboardState extends State<HomeDashboard> {
               children: [
                 SensorCard(
                   icon: "🌡",
-                  label: "Temperature",
+                  label: l10n.temperature,
                   value: sensors.temperature.toStringAsFixed(1),
                   unit: "°C",
                   status: sensors.tempStatus,
                 ),
                 SensorCard(
                   icon: "💧",
-                  label: "Humidity",
+                  label: l10n.humidity,
                   value: sensors.humidity.toStringAsFixed(1),
                   unit: "%",
                   status: sensors.humidityStatus,
                 ),
                 SensorCard(
                   icon: "💨",
-                  label: "CO₂",
+                  label: l10n.co2,
                   value: sensors.co2.toStringAsFixed(0),
                   unit: "ppm",
                   status: sensors.co2Status,
                 ),
                 SensorCard(
                   icon: "🌱",
-                  label: "Soil Moisture",
+                  label: l10n.soilMoisture,
                   value: sensors.soilMoisture.toStringAsFixed(1),
                   unit: "%",
                   status: sensors.soilStatus,
@@ -294,7 +315,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                     const Text("📋", style: TextStyle(fontSize: 20)),
                     const SizedBox(width: 12),
                     Text(
-                      "View History & Reports",
+                      l10n.viewHistoryReports,
                       style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -304,6 +325,50 @@ class _HomeDashboardState extends State<HomeDashboard> {
                     const Spacer(),
                     const Icon(Icons.arrow_forward_ios,
                         size: 14, color: AppColors.secondary),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            // ── Harvest Log Button ──────────────────────────────────────────
+            InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => const HarvestEntriesScreen()),
+              ),
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 18),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.35)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.04),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    const Text("📦", style: TextStyle(fontSize: 20)),
+                    const SizedBox(width: 12),
+                    Text(
+                      l10n.harvestLog,
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const Spacer(),
+                    const Icon(Icons.arrow_forward_ios,
+                        size: 14, color: AppColors.primary),
                   ],
                 ),
               ),
@@ -367,11 +432,12 @@ class _AlertsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (alerts.isEmpty) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionHeader(title: "✅ Alerts & Actions"),
+          _SectionHeader(title: "✅ ${l10n.alertsAndActions}"),
           const SizedBox(height: 10),
           Container(
             width: double.infinity,
@@ -382,7 +448,7 @@ class _AlertsSection extends StatelessWidget {
               border: Border.all(color: AppColors.good.withValues(alpha: 0.3)),
             ),
             child: Text(
-              'All sensors within ideal range 🎉',
+              l10n.allSensorsGood,
               style: GoogleFonts.poppins(fontSize: 13, color: AppColors.good, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             ),
@@ -393,7 +459,7 @@ class _AlertsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _SectionHeader(title: "⚠️ Alerts & Actions"),
+        _SectionHeader(title: "⚠️ ${l10n.alertsAndActions}"),
         const SizedBox(height: 10),
         ...alerts.map((a) => AlertCard(
               severity: a.severity,

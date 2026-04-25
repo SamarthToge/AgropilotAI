@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
+import 'package:agropilot_ai/gen_l10n/app_localizations.dart';
 import '../constants/app_constants.dart';
 import '../providers/sensor_provider.dart';
 import '../providers/history_provider.dart';
@@ -32,13 +33,14 @@ class _SensorDetailsScreenState extends State<SensorDetailsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          "Sensor Details",
+          l10n.sensorDetails,
           style: GoogleFonts.poppins(
               fontWeight: FontWeight.w700, color: AppColors.textPrimary),
         ),
@@ -50,20 +52,20 @@ class _SensorDetailsScreenState extends State<SensorDetailsScreen>
           indicatorColor: AppColors.primary,
           labelStyle:
               GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600),
-          tabs: const [
-            Tab(text: "🌡 Temp"),
-            Tab(text: "💧 Humidity"),
+          tabs: [
+            Tab(text: "🌡 ${l10n.temperature.split(' ').first}"),
+            Tab(text: "💧 ${l10n.humidity.split(' ').first}"),
             Tab(text: "💨 CO₂"),
-            Tab(text: "🌱 Soil"),
+            Tab(text: "🌱 ${l10n.soilMoisture.split(' ').first}"),
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabCtrl,
-        children: const [
+        children: [
           _SensorTab(
             sensorKey: 'temperature',
-            title: "Temperature",
+            title: l10n.temperature,
             icon: "🌡",
             unit: "°C",
             idealText: "Ideal: 20°C – 27°C",
@@ -72,7 +74,7 @@ class _SensorDetailsScreenState extends State<SensorDetailsScreen>
           ),
           _SensorTab(
             sensorKey: 'humidity',
-            title: "Humidity",
+            title: l10n.humidity,
             icon: "💧",
             unit: "%",
             idealText: "Ideal: 50% – 70%",
@@ -81,7 +83,7 @@ class _SensorDetailsScreenState extends State<SensorDetailsScreen>
           ),
           _SensorTab(
             sensorKey: 'co2',
-            title: "CO₂",
+            title: l10n.co2,
             icon: "💨",
             unit: "ppm",
             idealText: "Ideal: 800–1000 ppm",
@@ -90,7 +92,7 @@ class _SensorDetailsScreenState extends State<SensorDetailsScreen>
           ),
           _SensorTab(
             sensorKey: 'soil',
-            title: "Soil Moisture",
+            title: l10n.soilMoisture,
             icon: "🌱",
             unit: "%",
             idealText: "Ideal: 60% – 75%",
@@ -234,7 +236,7 @@ class _SensorTab extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    "Last 24 Hours",
+                    AppLocalizations.of(context)!.last24Hours,
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -252,7 +254,7 @@ class _SensorTab extends StatelessWidget {
                           height: 2,
                           color: AppColors.secondary),
                       const SizedBox(width: 4),
-                      Text("Actual",
+                      Text(AppLocalizations.of(context)!.actual,
                           style: GoogleFonts.poppins(
                               fontSize: 11, color: AppColors.textSecondary)),
                       const SizedBox(width: 12),
@@ -262,7 +264,7 @@ class _SensorTab extends StatelessWidget {
                           decoration: const BoxDecoration(
                               color: AppColors.warning)),
                       const SizedBox(width: 4),
-                      Text("Ideal Range Mid",
+                      Text(AppLocalizations.of(context)!.idealRangeMid,
                           style: GoogleFonts.poppins(
                               fontSize: 11, color: AppColors.textSecondary)),
                     ],
@@ -353,17 +355,17 @@ class _SensorTab extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                  child: _StatCard(label: "Minimum",
+                  child: _StatCard(label: AppLocalizations.of(context)!.minimum,
                       value: "${min.toStringAsFixed(1)} $unit",
                       color: AppColors.secondary)),
               const SizedBox(width: 10),
               Expanded(
-                  child: _StatCard(label: "Maximum",
+                  child: _StatCard(label: AppLocalizations.of(context)!.maximum,
                       value: "${max.toStringAsFixed(1)} $unit",
                       color: AppColors.critical)),
               const SizedBox(width: 10),
               Expanded(
-                  child: _StatCard(label: "Average",
+                  child: _StatCard(label: AppLocalizations.of(context)!.average,
                       value: "${avg.toStringAsFixed(1)} $unit",
                       color: AppColors.primary)),
             ],

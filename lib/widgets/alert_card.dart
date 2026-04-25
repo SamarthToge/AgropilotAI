@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:agropilot_ai/gen_l10n/app_localizations.dart';
 import '../constants/app_constants.dart';
 
 class AlertCard extends StatelessWidget {
@@ -82,7 +83,7 @@ class AlertCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  "Current: $currentValue  ·  Ideal: $idealValue",
+                  "${AppLocalizations.of(context)!.actual}: $currentValue  ·  ${AppLocalizations.of(context)!.idealRangeMid}: $idealValue",
                   style: GoogleFonts.poppins(
                     fontSize: 11,
                     color: AppColors.textSecondary,

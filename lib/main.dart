@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:agropilot_ai/gen_l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +9,7 @@ import 'constants/app_constants.dart';
 import 'providers/app_state.dart';
 import 'providers/sensor_provider.dart';
 import 'providers/history_provider.dart';
+import 'providers/language_provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_dashboard.dart';
 import 'services/dummy_data_seeder.dart';
@@ -24,6 +27,10 @@ Future<void> main() async {
     print('Firebase initialization failed: $e');
   }
 
+  // Load persisted language before app renders
+  final languageProvider = LanguageProvider();
+  await languageProvider.loadSavedLanguage();
+
   // Seed dummy data on first launch (don't block runApp)
   print('Checking if dummy data needs to be seeded...');
   DummyDataSeeder.instance.seedAll().then((_) {
@@ -35,6 +42,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(value: languageProvider),
         ChangeNotifierProvider(create: (_) => AppState()),
         ChangeNotifierProvider(create: (_) => SensorProvider()..startListening()),
         ChangeNotifierProvider(create: (_) => HistoryProvider()),
@@ -49,9 +57,31 @@ class AgroPilotApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final langProvider = context.watch<LanguageProvider>();
+
     return MaterialApp(
       title: 'AgroPilot AI',
       debugShowCheckedModeBanner: false,
+
+      // ── Localisation ────────────────────────────────────────────────
+      locale: langProvider.locale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('hi'),
+        Locale('mr'),
+        Locale('kn'),
+        Locale('te'),
+        Locale('ml'),
+        Locale('ta'),
+      ],
+
+      // ── Theme ────────────────────────────────────────────────────────
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.primary,
@@ -67,6 +97,7 @@ class AgroPilotApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
+
       home: const AuthWrapper(),
     );
   }
@@ -85,10 +116,9 @@ class AuthWrapper extends StatelessWidget {
             body: Center(child: CircularProgressIndicator()),
           );
         }
-        
+
         if (snapshot.hasData) {
           final user = snapshot.data!;
-          // Trigger loading of user data if not already loaded
           WidgetsBinding.instance.addPostFrameCallback((_) {
             final appState = context.read<AppState>();
             if (appState.profile == null) {
@@ -98,7 +128,7 @@ class AuthWrapper extends StatelessWidget {
           });
           return const HomeDashboard();
         }
-        
+
         return const LoginScreen();
       },
     );

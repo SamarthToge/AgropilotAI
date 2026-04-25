@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
+import 'package:agropilot_ai/gen_l10n/app_localizations.dart';
 import '../constants/app_constants.dart';
 import '../providers/history_provider.dart';
 
@@ -24,6 +25,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final history = context.watch<HistoryProvider>();
+    final l10n = AppLocalizations.of(context)!;
     final yieldTrend = history.weeklyYieldTrend;
     final averages = history.weeklySensorAverages;
     final alertsByDay = history.alertsByDay;
@@ -40,7 +42,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          "History & Reports",
+          l10n.historyReports,
           style: GoogleFonts.poppins(
               fontWeight: FontWeight.w700, color: AppColors.textPrimary),
         ),
@@ -54,7 +56,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // ── Yield Trend Chart ────────────────────────────────────
-                  _sectionTitle("📈 Yield Trend — Last 4 Weeks"),
+                  _sectionTitle("📈 ${l10n.trend} — Last 4 Weeks"),
                   const SizedBox(height: 10),
                   Container(
                     decoration: BoxDecoration(
@@ -142,7 +144,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   const SizedBox(height: 20),
 
                   // ── Weekly Sensor Averages ─────────────────────────────────
-                  _sectionTitle("📋 Weekly Sensor Averages"),
+                  _sectionTitle("📋 ${l10n.average} ${l10n.sensors}"),
                   const SizedBox(height: 10),
                   Container(
                     decoration: BoxDecoration(
@@ -159,7 +161,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       children: [
                         _SensorAvgRow(
                           icon: "🌡",
-                          label: "Temperature",
+                          label: l10n.temperature,
                           value:
                               "${(averages['temperature'] ?? 24.2).toStringAsFixed(1)} °C",
                           status: getSensorStatus(
@@ -168,7 +170,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         const Divider(height: 1, indent: 16, endIndent: 16),
                         _SensorAvgRow(
                           icon: "💧",
-                          label: "Humidity",
+                          label: l10n.humidity,
                           value:
                               "${(averages['humidity'] ?? 64.3).toStringAsFixed(1)} %",
                           status: getSensorStatus(
@@ -177,7 +179,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         const Divider(height: 1, indent: 16, endIndent: 16),
                         _SensorAvgRow(
                           icon: "💨",
-                          label: "CO₂",
+                          label: l10n.co2,
                           value:
                               "${(averages['co2'] ?? 941).toStringAsFixed(0)} ppm",
                           status:
@@ -186,7 +188,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         const Divider(height: 1, indent: 16, endIndent: 16),
                         _SensorAvgRow(
                           icon: "🌱",
-                          label: "Soil Moisture",
+                          label: l10n.soilMoisture,
                           value:
                               "${(averages['soil'] ?? 44.2).toStringAsFixed(1)} %",
                           status:
@@ -198,7 +200,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   const SizedBox(height: 20),
 
                   // ── Past Alerts Log ────────────────────────────────────────
-                  _sectionTitle("🔔 Past Alerts Log"),
+                  _sectionTitle("🔔 ${l10n.notificationsTitle} Log"),
                   const SizedBox(height: 10),
                   if (alertsByDay.isEmpty)
                     Container(
@@ -354,6 +356,7 @@ class _AlertLogRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final noAlert = count == 0;
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       child: Row(
@@ -398,7 +401,7 @@ class _AlertLogRow extends StatelessWidget {
             ),
           ),
           Text(
-            noAlert ? "No Alerts" : "$count Alert${count > 1 ? 's' : ''}",
+            noAlert ? l10n.allGood : "$count ${l10n.alertLevel}${count > 1 ? 's' : ''}",
             style: GoogleFonts.poppins(
               fontSize: 12,
               fontWeight: FontWeight.w600,

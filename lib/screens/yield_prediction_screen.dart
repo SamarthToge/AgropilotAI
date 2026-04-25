@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:agropilot_ai/gen_l10n/app_localizations.dart';
 import '../constants/app_constants.dart';
 import '../providers/app_state.dart';
 import '../widgets/status_badge.dart';
@@ -11,6 +12,7 @@ class YieldPredictionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -18,7 +20,7 @@ class YieldPredictionScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          "Yield Prediction",
+          l10n.yieldPrediction,
           style: GoogleFonts.poppins(
               fontWeight: FontWeight.w700, color: AppColors.textPrimary),
         ),
@@ -51,7 +53,7 @@ class YieldPredictionScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    "🌾 Predicted Yield",
+                    "🌾 ${l10n.predictedYield}",
                     style: GoogleFonts.poppins(
                         color: Colors.white70, fontSize: 14),
                   ),
@@ -72,15 +74,15 @@ class YieldPredictionScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _YieldMetric(
-                          label: "Target",
+                          label: l10n.target,
                           value: "${state.targetYield.toStringAsFixed(1)} kg/m²"),
                       _Divider(),
                       _YieldMetric(
-                          label: "Gap",
+                          label: l10n.gap,
                           value: "-${state.yieldGap.toStringAsFixed(1)} kg/m²"),
                       _Divider(),
                       _YieldMetric(
-                          label: "Days Left",
+                          label: l10n.daysLeft,
                           value: "${state.remainingDays} days"),
                     ],
                   ),
@@ -90,7 +92,7 @@ class YieldPredictionScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             // ── SHAP Feature Importance ───────────────────────────────
-            _sectionTitle("📊 Feature Importance (SHAP)"),
+            _sectionTitle(l10n.featureImportance),
             const SizedBox(height: 10),
             Container(
               decoration: BoxDecoration(
@@ -141,7 +143,7 @@ class YieldPredictionScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             // ── Week on week ──────────────────────────────────────────
-            _sectionTitle("📆 Week on Week Comparison"),
+            _sectionTitle(l10n.weekComparison),
             const SizedBox(height: 10),
             Container(
               decoration: BoxDecoration(
@@ -158,13 +160,13 @@ class YieldPredictionScreen extends StatelessWidget {
               child: Column(
                 children: [
                   _WeekRow(
-                      label: "This Week",
+                      label: l10n.thisWeek,
                       value: "2.1 kg",
                       badge: "🟡",
                       color: AppColors.warning),
                   const Divider(height: 20),
                   _WeekRow(
-                      label: "Last Week",
+                      label: l10n.lastWeek,
                       value: "2.4 kg",
                       badge: "🟢",
                       color: AppColors.good),
@@ -173,7 +175,7 @@ class YieldPredictionScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Trend",
+                        l10n.trend,
                         style: GoogleFonts.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
